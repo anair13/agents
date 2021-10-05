@@ -1027,7 +1027,7 @@ class Checkpointer(object):
            options: tf.train.CheckpointOptions = None):
     """Save state to checkpoint."""
     saved_checkpoint = self._manager.save(
-        checkpoint_number=global_step, options=options)
+        checkpoint_number=global_step, ) # options=options)
     self._checkpoint_exists = True
     logging.info('%s', 'Saved checkpoint: {}'.format(saved_checkpoint))
 

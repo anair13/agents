@@ -55,13 +55,20 @@ def updated_sample(sample: Any, reward_shift: float,
         step_type=next_time_step.step_type,
         reward=next_time_step.reward + reward_shift,
         discount=next_time_step.discount,
-        observation=next_time_step.observation)
+        observation=tf.cast(next_time_step.observation, tf.float64))
     action_step = sample.action_step
     if action_clipping:
       action_step = action_step._replace(
           action=tf.nest.map_structure(_clip_actions, action_step.action))
+    # sample.time_step.observation = tf.cast(sample.time_step.observation, tf.float64)
+    # sample.time_step = next_time_step
+    time_step = ts.TimeStep(
+        step_type=sample.time_step.step_type,
+        reward=sample.time_step.reward + reward_shift,
+        discount=sample.time_step.discount,
+        observation=tf.cast(sample.time_step.observation, tf.float64))
     return trajectory.Transition(
-        time_step=sample.time_step,
+        time_step=time_step, # sample.time_step,
         action_step=action_step,
         next_time_step=next_time_step)
 

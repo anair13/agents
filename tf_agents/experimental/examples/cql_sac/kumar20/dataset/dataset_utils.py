@@ -85,7 +85,8 @@ def create_episode_dataset(d4rl_dataset: Dict[str, D4RLListType],
     dataset['discounts'].append(1.0 - int(d4rl_dataset['terminals'][i]))
 
     is_terminal = d4rl_dataset['terminals'][i]
-    is_timeout = d4rl_dataset['timeouts'][i]
+    # import ipdb; ipdb.set_trace()
+    is_timeout = False # d4rl_dataset['timeouts'][i]
     # Remove the last step if this is a timeout. Assumes timeouts occur
     # after at least 1 step in an episode.
     if exclude_timeouts and is_timeout and not is_terminal:
@@ -95,5 +96,6 @@ def create_episode_dataset(d4rl_dataset: Dict[str, D4RLListType],
 
   for key, value in dataset.items():
     dataset[key] = np.asarray(value, np.float32)
+  d4rl_dataset['observations'] = d4rl_dataset['observations'].astype(np.float64)
 
   return dataset
